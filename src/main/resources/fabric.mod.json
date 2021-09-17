@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "asa",
+	"version": "${version}",
+	"name": "Air Strafing Attribute",
+	"description": "Turns the air strafing speed of the player into an EntityAttribute.",
+	"authors": [],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/asa/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.cammiescorner.asa.AirStrafingAttribute"
+		]
+	},
+	"mixins": [
+		"asa.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.11.3",
+		"fabric": "*",
+		"minecraft": "1.17.x"
+	}
+}
