@@ -22,21 +22,21 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 	@Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;flyingSpeed:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
 	public void setSprintingModifier(PlayerEntity playerEntity, float value) {
-		playerEntity.getAttributeInstance(AirStrafingAttribute.AIR_STRAFING_SPEED).addTemporaryModifier(new EntityAttributeModifier(AirStrafingAttribute.SPRINTING_UUID, "Sprinting", 0.005999999865889549D, EntityAttributeModifier.Operation.ADDITION));
+		playerEntity.getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute()).addTemporaryModifier(new EntityAttributeModifier(AirStrafingAttribute.SPRINTING_UUID, "Sprinting", 0.005999999865889549D, EntityAttributeModifier.Operation.ADDITION));
 	}
 
 	@Redirect(method = "travel", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;flyingSpeed:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
 	public void setFlyingModifier(PlayerEntity playerEntity, float value) {
-		playerEntity.getAttributeInstance(AirStrafingAttribute.AIR_STRAFING_SPEED).addTemporaryModifier(new EntityAttributeModifier(AirStrafingAttribute.FLYING_UUID, "Flying", abilities.getFlySpeed() * (this.isSprinting() ? 2 : 1) - AirStrafingAttribute.AIR_STRAFING_SPEED.getDefaultValue(), EntityAttributeModifier.Operation.ADDITION));
+		playerEntity.getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute()).addTemporaryModifier(new EntityAttributeModifier(AirStrafingAttribute.FLYING_UUID, "Flying", abilities.getFlySpeed() * (this.isSprinting() ? 2 : 1) - AirStrafingAttribute.getAirStrafingAttribute().getDefaultValue(), EntityAttributeModifier.Operation.ADDITION));
 	}
 
 	@Redirect(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;flyingSpeed:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
 	public void undoSprintingModifier(PlayerEntity playerEntity, float value) {
-		playerEntity.getAttributeInstance(AirStrafingAttribute.AIR_STRAFING_SPEED).removeModifier(AirStrafingAttribute.SPRINTING_UUID);
+		playerEntity.getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute()).removeModifier(AirStrafingAttribute.SPRINTING_UUID);
 	}
 
 	@Redirect(method = "travel", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;flyingSpeed:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
 	public void undoFlyingModifier(PlayerEntity playerEntity, float value) {
-		playerEntity.getAttributeInstance(AirStrafingAttribute.AIR_STRAFING_SPEED).removeModifier(AirStrafingAttribute.FLYING_UUID);
+		playerEntity.getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute()).removeModifier(AirStrafingAttribute.FLYING_UUID);
 	}
 }

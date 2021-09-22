@@ -19,7 +19,7 @@ public abstract class LivingEntityMixin extends Entity {
 
 	@Inject(method = "createLivingAttributes", at = @At("RETURN"))
 	private static void createLivingAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> info) {
-		info.getReturnValue().add(AirStrafingAttribute.AIR_STRAFING_SPEED);
+		info.getReturnValue().add(AirStrafingAttribute.getAirStrafingAttribute());
 	}
 
 	@Redirect(method = "getMovementSpeed(F)F", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;flyingSpeed:F", opcode = Opcodes.GETFIELD))

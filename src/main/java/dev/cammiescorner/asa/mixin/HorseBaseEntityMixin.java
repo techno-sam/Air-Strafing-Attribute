@@ -17,12 +17,12 @@ public abstract class HorseBaseEntityMixin extends AnimalEntity {
 
 	@Redirect(method = "travel", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/passive/HorseBaseEntity;flyingSpeed:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
 	public void setAirSpeed(HorseBaseEntity horseBaseEntity, float value) {
-		if(horseBaseEntity.getAttributeInstance(AirStrafingAttribute.AIR_STRAFING_SPEED).getModifier(AirStrafingAttribute.MOUNT_UUID) == null)
-			horseBaseEntity.getAttributeInstance(AirStrafingAttribute.AIR_STRAFING_SPEED).addTemporaryModifier(new EntityAttributeModifier(AirStrafingAttribute.MOUNT_UUID, "Mount speed", getMovementSpeed() * 0.1 - AirStrafingAttribute.AIR_STRAFING_SPEED.getDefaultValue(), EntityAttributeModifier.Operation.ADDITION));
+		if(horseBaseEntity.getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute()).getModifier(AirStrafingAttribute.MOUNT_UUID) == null)
+			horseBaseEntity.getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute()).addTemporaryModifier(new EntityAttributeModifier(AirStrafingAttribute.MOUNT_UUID, "Mount speed", getMovementSpeed() * 0.1 - AirStrafingAttribute.getAirStrafingAttribute().getDefaultValue(), EntityAttributeModifier.Operation.ADDITION));
 	}
 
 	@Redirect(method = "travel", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/passive/HorseBaseEntity;flyingSpeed:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
 	public void undoAirSpeed(HorseBaseEntity horseBaseEntity, float value) {
-		horseBaseEntity.getAttributeInstance(AirStrafingAttribute.AIR_STRAFING_SPEED).removeModifier(AirStrafingAttribute.MOUNT_UUID);
+		horseBaseEntity.getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute()).removeModifier(AirStrafingAttribute.MOUNT_UUID);
 	}
 }
