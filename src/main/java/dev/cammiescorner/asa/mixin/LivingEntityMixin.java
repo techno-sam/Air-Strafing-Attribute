@@ -1,20 +1,26 @@
 package dev.cammiescorner.asa.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.cammiescorner.asa.AirStrafingAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.world.World;
-import org.objectweb.asm.Opcodes;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
+	@Shadow @Nullable public abstract EntityAttributeInstance getAttributeInstance(EntityAttribute attribute);
+
 	public LivingEntityMixin(EntityType<?> entityType, World world) { super(entityType, world); }
 
 	@Inject(method = "createLivingAttributes", at = @At("RETURN"))
@@ -22,8 +28,25 @@ public abstract class LivingEntityMixin extends Entity {
 		info.getReturnValue().add(AirStrafingAttribute.getAirStrafingAttribute());
 	}
 
-	@Redirect(method = "getMovementSpeed(F)F", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;flyingSpeed:F", opcode = Opcodes.GETFIELD))
-	public float getMovementSpeed(LivingEntity livingEntity) {
-		return AirStrafingAttribute.getAirStrafingSpeed(livingEntity);
+	@ModifyReturnValue(method = "getOffGroundSpeed", at = @At("RETURN"))
+	public float getOffGroundSpeed(float speed) {
+		EntityAttributeInstance instance = getAttributeInstance(AirStrafingAttribute.getAirStrafingAttribute());
+		if (instance == null) return speed;
+
+        if (speed != AirStrafingAttribute.getAirStrafingAttribute().getDefaultValue()) {
+			instance.addTemporaryModifier(new EntityAttributeModifier(
+				AirStrafingAttribute.TEMP_OVERRIDE_UUID,
+				"Temp Override",
+				speed - AirStrafingAttribute.getAirStrafingAttribute().getDefaultValue(),
+				EntityAttributeModifier.Operation.ADDITION
+			));
+		}
+
+		speed = AirStrafingAttribute.getAirStrafingSpeed((LivingEntity) (Object) this);
+
+		if (instance.getModifier(AirStrafingAttribute.TEMP_OVERRIDE_UUID) != null) {
+			instance.removeModifier(AirStrafingAttribute.TEMP_OVERRIDE_UUID);
+		}
+		return speed;
 	}
 }

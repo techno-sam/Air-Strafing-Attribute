@@ -10,6 +10,11 @@
 
 Air Strafing Attribute is a library that adds an attribute for the `flyingSpeed` variable (soon to be `airStrafingSpeed`, definitely) so multiple mods can safely modify the air strafing speed of entities.
 
+The attribute's id is `asa:air_strafing_speed` and is registered for all `LivingEntity`s.
+
+> [!NOTE]
+> This port is not (yet) on maven. Sorry for the inconvenience.
+
 If you want to add ASA as a dependency, just add the following to your `build.gradle` file.
 ```gradle
 repositories {

@@ -4,7 +4,6 @@
 	"package": "dev.cammiescorner.asa.mixin",
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
-		"HorseBaseEntityMixin",
 		"LivingEntityMixin",
 		"PlayerEntityMixin"
 	],
